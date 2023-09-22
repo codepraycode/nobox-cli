@@ -10,7 +10,7 @@ interface IUser {
     age: number
 }
 
-type IUserRecord = Omit<IUser, "id">;
+export type IUserRecord = Omit<IUser, "id">;
 
 const UserStructure: Space<IUserRecord> = {
     space: "User",
@@ -44,17 +44,17 @@ const UserStructure: Space<IUserRecord> = {
 const UserModel = createRowSchema<IUserRecord>(UserStructure);
 
 
-class User implements IUser {
+class User implements Omit<IUser, "password"> {
     id: string;
     email: string;
-    password: string;
+    // password: string;
     firstName: string;
     age: number;
 
-    constructor (record) {
+    constructor (record: IUser) {
         this.id = record.id;
         this.email = record.email;
-        this.password = record.password;
+        // this.password = record.password;
         this.firstName = record.firstName;
         this.age = record.age;
     }
@@ -68,17 +68,25 @@ class User implements IUser {
     static async create(data: IUserRecord):Promise<User | void> {
         // console.log(data);
 
-        const newRecord = await UserModel.insertOne(data);
+        try {
+            const newRecord = await UserModel.insertOne(data);
 
+            console.log(`Created user with id: ${newRecord.id}`);
+            return new User(newRecord);
+        } catch (err) {
+            // console.log(err)
+        }
         // Returns a new instance of User
-        return new User(newRecord);
+        
     }
     
     static async update(user:User, data: Partial<IUserRecord>): Promise<User | void> {
         // console.log("Update:", user.id, "with", data);
         const updatedRecord = await UserModel.updateOneById(user.id, data);
 
-        Object.entries(updatedRecord).forEach(([key, value])=>user[key] = value);
+        // Object.entries(updatedRecord).forEach(([key, value])=>user[key] = value);
+
+        console.log(updatedRecord);
 
         return user;
     }
@@ -92,12 +100,20 @@ class User implements IUser {
         // return new User()
     }
 
-    static async fetch(query: Partial<IUserRecord>): Promise<User[] | void> {
+    static async fetch(query: Partial<IUserRecord>): Promise<User[] | void |Error > {
         // console.log("Fetch:", query);
+        let records:IUser[];
 
-        const records = await UserModel.find(query);
+        try {
+            records = await UserModel.find(query);
+        } catch(err) {
+            return err as Error;
+        }
+
+
         // Returns an array of instances of User
-        console.log("Fetch records:", records);
+        return records.map((record)=> new User(record));
+
     }
 }
 

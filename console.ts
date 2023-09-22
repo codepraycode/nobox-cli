@@ -1,7 +1,8 @@
 import { createInterface } from "readline";
+import User, { IUserRecord } from "./models/user";
 
 interface IDocs {
-    [key: string]: string
+    [key: string]: string | number
 }
 
 const Docs: IDocs = {
@@ -113,10 +114,37 @@ class Console {
         return;
     }
 
-    static create(args: string[]) {
-        console.log(args);
+    static async create(args: string[]) {
+        // console.log(args);
+
+        // Parse args
+        const params:IDocs = {}
+        const fields = ['email', 'firstName', 'password', 'age'];
+
+        args.forEach((item)=>{
+            const [field, val] = item.split("=");
+
+            if (fields.includes(field)) params[field] = val.replace(/"/g, '');
+        });
+
+        const missen_fields = fields.filter((item)=>!params[item])
+
+        if (missen_fields.length > 0) {
+            const field_count = missen_fields.length;
+
+            console.log(`"${missen_fields.join('", "')}" field${field_count > 1 ? 's':''} ${field_count > 1 ? 'are':'is'} required.`);
+
+            return;
+        }
+
+        // console.log(params);
+        params["age"] = Number(params["age"]);
+
+        await User.create(params as any);
+        
         return;
     }
+
     static update(args: string[]) {
         console.log(args);
         return;
@@ -125,13 +153,15 @@ class Console {
         console.log(args);
         return;
     }
-    static all() {
-        return;
+    static async all() {
+        
+        const records = await User.fetch({});
+        console.log(records);
     }
 
 
     // Console switch
-    static async start() {
+    static async run() {
         let running = true;
 
         do {
