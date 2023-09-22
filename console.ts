@@ -145,14 +145,51 @@ class Console {
         return;
     }
 
-    static update(args: string[]) {
-        console.log(args);
+
+    static async update(args: string[]) {
+        // console.log(args);
+
+        // Parse args
+        const params:IDocs = {}
+        const fields = ['email', 'firstName', 'password', 'age'];
+
+        args.forEach((item)=>{
+            const [field, val] = item.split("=");
+            if (field === "id" || fields.includes(field)) params[field] = val.replace(/"/g, '').replace(/'/g, '');
+        });
+
+        let {id, ...rest} = params;
+
+        if (!id) {
+            console.log("'id' is required!");
+            return;
+        }
+
+        const missen_fields = fields.filter((item)=>!params[item])
+
+        if (missen_fields.length > 3) {
+            const field_count = missen_fields.length;
+
+            console.log(`One of "${missen_fields.join('", "')}" field${field_count > 1 ? 's':''} ${field_count > 1 ? 'are':'is'} required.`);
+
+            return;
+        }
+
+
+        if(params["age"]) params["age"] = Number(params["age"]);
+
+        await User.update(id as string, rest);
+
         return;
     }
+
+
     static get(args: string[]) {
         console.log(args);
         return;
     }
+
+
     static async all() {
         
         const records = await User.fetch({});

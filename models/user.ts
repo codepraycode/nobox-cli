@@ -54,15 +54,9 @@ class User implements Omit<IUser, "password"> {
     constructor (record: IUser) {
         this.id = record.id;
         this.email = record.email;
-        // this.password = record.password;
         this.firstName = record.firstName;
         this.age = record.age;
     }
-
-    async update(data: Partial<IUserRecord>):Promise<User | void> {
-        return User.update(this, data);
-    }
-
 
 
     static async create(data: IUserRecord):Promise<User | void> {
@@ -80,15 +74,19 @@ class User implements Omit<IUser, "password"> {
         
     }
     
-    static async update(user:User, data: Partial<IUserRecord>): Promise<User | void> {
+    static async update(id: string, data: Partial<IUserRecord>): Promise<User | void | Error > {
         // console.log("Update:", user.id, "with", data);
-        const updatedRecord = await UserModel.updateOneById(user.id, data);
 
-        // Object.entries(updatedRecord).forEach(([key, value])=>user[key] = value);
+        try {
+            const updatedRecord = await UserModel.updateOneById(id, data);
 
-        console.log(updatedRecord);
+            // console.log(updatedRecord);
+            console.log(`Updated user with id: ${updatedRecord.id}`);
+            return new User(updatedRecord);
 
-        return user;
+        } catch(err) {
+            return err as Error;
+        }
     }
 
     static async get(id: string): Promise<User | void> {
@@ -100,7 +98,7 @@ class User implements Omit<IUser, "password"> {
         // return new User()
     }
 
-    static async fetch(query: Partial<IUserRecord>): Promise<User[] | void |Error > {
+    static async fetch(query: Partial<IUserRecord>): Promise<User[] | void | Error > {
         // console.log("Fetch:", query);
         let records:IUser[];
 
