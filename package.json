@@ -1,12 +1,12 @@
 {
-  "name": "nobox-tutorial",
+  "name": "nobox-always",
   "version": "1.0.0",
   "description": "A project to try out all of nobox's capabilities",
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "codepraycode",
   "license": "ISC",
   "dependencies": {
     "nobox-client": "^1.1.11"
