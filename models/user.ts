@@ -89,13 +89,22 @@ class User implements Omit<IUser, "password"> {
         }
     }
 
-    static async get(id: string): Promise<User | void> {
+    static async get(id: string): Promise<User | void | Error> {
         // console.log("Fetch:", id);
 
-        const record = await UserModel.findOne({ id });
-        // Returns an instance of User
-        console.log("Fetch record:", record);
-        // return new User()
+        try {
+            const record = await UserModel.findOne({ id });
+
+            if (!record) {
+                console.log("No record found");
+                return
+            }
+
+            return new User(record);
+
+        } catch(err) {
+            return err as Error;
+        }
     }
 
     static async fetch(query: Partial<IUserRecord>): Promise<User[] | void | Error > {
@@ -110,7 +119,10 @@ class User implements Omit<IUser, "password"> {
 
 
         // Returns an array of instances of User
-        return records.map((record)=> new User(record));
+        try {
+
+            return records.map((record)=> new User(record));
+        } catch(err){}
 
     }
 }

@@ -33,8 +33,7 @@ const Docs: IDocs = {
     update - Used to update a User by id
         receives id, email, password, firstname, age
 
-        Usage:
-            update id="2dfsklm" age="21"
+        Usage: update id=[id] age=[id]
         
         Fields:
             id: required
@@ -49,10 +48,8 @@ const Docs: IDocs = {
     `,
     get: `
     get - Used to retrieve a User by id
-        receives id
 
-        Usage:
-            update id="2dfsklm"
+        Usage: get [id]
         
         Fields:
             id: required
@@ -184,8 +181,17 @@ class Console {
     }
 
 
-    static get(args: string[]) {
-        console.log(args);
+    static async get(args: string[]) {
+        // console.log(args);
+
+        const id = args[0];
+
+        if (id) {
+            const record = await User.get(id);
+            console.log(record);
+
+        } else console.log("Id not specified");
+
         return;
     }
 
