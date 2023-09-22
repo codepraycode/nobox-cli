@@ -7,11 +7,20 @@ interface IDocs {
 
 const Docs: IDocs = {
     help: `
-        Console to interact with Nobox service
+        Console to interact with Nobox service (based on documentation)
 
-        Commands are 'help', 'create', 'update', 'get', 'all', 'quit'
+        Reference doc => https://www.docs.nobox.cloud/
+
+        Commands:
+            Help - 'help', 'help [command]'
+            Inser/Update - 'create [...args]', 'update [...args]'
+            Retrieve = 'get [id]', 'all'
+            
+            Use 'quit' or 'exit' to terminate console.
 
         To get decription of a command, enter "help [command]"
+
+        To view this anytime, enter "help"
     `,
     create: `
     create - Used to create a new User
@@ -221,7 +230,7 @@ class Console {
             }
 
             // Terminate consolse process
-            if (command === 'quit') {
+            if (command === 'quit' || command === 'exit') {
                 running = false;
                 continue;
             }
