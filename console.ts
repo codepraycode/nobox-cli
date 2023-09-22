@@ -113,6 +113,22 @@ class Console {
         return;
     }
 
+    static create(args: string[]) {
+        console.log(args);
+        return;
+    }
+    static update(args: string[]) {
+        console.log(args);
+        return;
+    }
+    static get(args: string[]) {
+        console.log(args);
+        return;
+    }
+    static all() {
+        return;
+    }
+
 
     // Console switch
     static async start() {
@@ -143,20 +159,27 @@ class Console {
             }
 
             if (command === 'create') {
+                this.create(args);
                 continue
             }
 
             if (command === 'update') {
+                this.update(args);
                 continue
             }
 
             if (command === 'get') {
+                this.get(args);
                 continue
             }
 
             if (command === 'all') {
+                this.all();
                 continue
             }
+
+
+            console.log(`Unknown command ${command}`);
 
         } while(running);
 
