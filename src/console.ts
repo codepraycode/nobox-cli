@@ -7,9 +7,9 @@ interface IDocs {
 
 const Docs: IDocs = {
     help: `
-        Console to interact with Nobox service (based on documentation)
+        Console to interact with Nobox console
 
-        Reference doc => https://www.docs.nobox.cloud/
+        Reference NoBox doc => https://www.docs.nobox.cloud/
 
         Commands:
             Help - 'help', 'help [command]'
