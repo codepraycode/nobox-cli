@@ -10,11 +10,12 @@ With the console, you can access your account, projects, collections/data, and t
 
 ## Features
 
-The current version includes the following features:
+The current version includes the following features, is basic interaction with the service as [taught in the documentation](https://www.docs.nobox.cloud/)
+which basically is to *interact with collections/data*, which involves:
 
-- Create record
-- Update Record
-- Get/fetch records
+- Creating collection
+- Fetching collection(s)
+- Updating collection(s)
 
 > As the project evolves, this document will be updated.
 
@@ -60,7 +61,15 @@ This project intends to make good use of all the services it offers, on this not
 - Have practical solutions to issues and questions on the services
 - Learn!
 
-There are important reasons why contributions will help a lot. To contribute to this project, read the [contribution guide](https://github.com/codepraycode/nobox-console/blob/main/.github/CONTRIBUTING.md) to get started.
+There are features to be implemented to make the first release of the console:
+
+- [ ] Authentication: User login with their credentials, obtain their token and continue with other features
+- [x] Access to collections
+  - Creating collection
+  - Fetching collection(s)
+  - Updating collection(s)
+
+To contribute to this project, read the [contribution guide](https://github.com/codepraycode/nobox-console/blob/main/.github/CONTRIBUTING.md) to get started.
 
 ## Discussion
 
