@@ -1,5 +1,5 @@
 require('dotenv').config();
-import Console from "./console";
+import Console from "./src/console";
 
 
 // Display console information first
