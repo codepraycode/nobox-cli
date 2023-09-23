@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "codepraycode",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "dependencies": {
     "nobox-client": "^1.1.11"
   },
