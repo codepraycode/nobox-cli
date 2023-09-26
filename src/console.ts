@@ -81,7 +81,6 @@ const readline = createInterface({
 });
 
 class Console {
-    
 
     private static async readLine(prompt:string): Promise<string> {
         return new Promise((resolve)=>{
