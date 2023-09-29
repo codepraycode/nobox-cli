@@ -41,7 +41,7 @@ const Log = console.log;
 
 
 
-const appyTextColor = (str: string, color:textColors) => {
+export const appyTextColor = (str: string, color:textColors) => {
 
     let text: string;
 
@@ -73,7 +73,7 @@ const appyTextColor = (str: string, color:textColors) => {
     return text;
 }
 
-const applyModifiers = (str: string, modifier:modifiers) => {
+export const applyModifiers = (str: string, modifier:modifiers) => {
     let text:string;
 
     switch (modifier) {
@@ -107,19 +107,19 @@ const applyModifiers = (str: string, modifier:modifiers) => {
 }
 
 
-const print = (
+const printOut = (
     message: string = "Sample",
     color:textColors = 'red',
     modifier:modifiers = 'reset') => {
 
+
+    const txt = applyModifiers(
+            appyTextColor(message, color), modifier);
     Log(
-        applyModifiers(
-            appyTextColor(message, color), modifier)
+        txt
     );
 }
 
 
-print()
 
-
-export default print;
+export default printOut;

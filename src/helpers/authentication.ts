@@ -1,5 +1,6 @@
 import { Nobox } from '../config';
 import env from '../utils/env';
+import printOut from '../utils/print';
 
 
 type authData = {
@@ -10,7 +11,7 @@ type authData = {
 export const authenticate = async (data:authData): Promise<boolean | null> => {
     
     let isAuthenticated = false
-    console.log("...")
+    printOut("Authenticating...", 'grey');
 
     const {email, password} = data;
     try {
@@ -25,11 +26,14 @@ export const authenticate = async (data:authData): Promise<boolean | null> => {
         
             console.log(token, user);
             isAuthenticated = true;
+
+            printOut("Authentication Successful", 'green');
         }
     
     } catch (err) {
-        console.log("Error while authenticating");
-        if(env.isDevelopment) console.log(err)
+        // console.log("Error while authenticating");
+        printOut("Error while authenticating", 'red');
+        if(env.isDevelopment) console.error(err)
         return null;
     }
 

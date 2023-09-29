@@ -8,6 +8,7 @@ import figlet from 'figlet';
 import PromptFactory from './utils/prompt';
 import env from './utils/env';
 import { authenticate } from './helpers/authentication';
+import printOut from './utils/print';
 
 
 
@@ -19,6 +20,9 @@ figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
 
     // Continue to attempt authentication
     // is isAuthenticated is null, there was an error with nobox service
+
+    printOut("Authentication is required!", 'blue')
+
     do {
         const auth:{email:string, password:string} = {
             email:'',
