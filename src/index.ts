@@ -10,12 +10,15 @@ import env from './utils/env';
 import { authenticate } from './helpers/authentication';
 
 
+
 figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
 
     console.log(data);
 
     let isAuthenticated: boolean | null;
 
+    // Continue to attempt authentication
+    // is isAuthenticated is null, there was an error with nobox service
     do {
         const auth:{email:string, password:string} = {
             email:'',
@@ -47,6 +50,7 @@ figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
     } while(!isAuthenticated)
 
 
+    // Terminate if not authenticated.
     if (!isAuthenticated) return;
     
     const menu = {
