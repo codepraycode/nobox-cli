@@ -1,102 +1,20 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 
-// @ts-ignore
-import { Select, Password, Input,Toggle  } from 'enquirer';
+
 import figlet from 'figlet';
-import { Nobox } from './config';
 
-type authPromptResponse = {
-    email: string,
-    password: string
-}
-
-var isAuthenticated = false;
-
-const authenticate = async (data:authPromptResponse) => {
-    
-    isAuthenticated = false
-    console.log("...")
-
-
-    // if (data.email !== 'me@mail.com') return;
-    // if (data.password !== 'letmein') return;
-
-    const {email, password} = data;
-
-    // @ts-ignore
-    const response = await Nobox.login({ email, password });
-
-    if (!response) return;
-
-    const {token, user} = response;
-    console.log(user)
-
-    isAuthenticated = true;
-    return;
-}
-
-
-
-
-
-
-
-
-
-type PromptType = 'choice' | 'question' | 'secret' | 'option';
-type PromptParams = {
-    name: string,
-    message: string,
-    choices?: {
-        name: string,
-        message: string
-    }[]
-};
-
-
-const PromptFactory = (promptType:PromptType, params?: PromptParams) => {
-
-    let prompt = new Input({
-        name:'prompt',
-        message:"Enter into prompt:"
-    })
-
-    switch (promptType) {
-        case 'choice':  // Defaults to the quit option
-            prompt = new Toggle(
-                params || {
-                    name:'quit',
-                    message:"Are you sure you want to quit?"
-                }
-            );
-            break;
-        
-        case 'question':
-            prompt = new Input(params);
-            break;
-        
-        case 'option':
-            prompt = new Select(params);
-            break;
-        case 'secret':
-            prompt = new Password(params);
-            break;
-        default:
-            // Defaults to question
-            break
-    }
-
-
-    return prompt.run();
-}
-
-
+import PromptFactory from './utils/prompt';
+import env from './utils/env';
+import { authenticate } from './helpers/authentication';
 
 
 figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
 
     console.log(data);
+
+    let isAuthenticated: boolean | null;
 
     do {
         const auth:{email:string, password:string} = {
@@ -110,7 +28,7 @@ figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
             message:"Enter email address:"
         });
 
-        const password = await PromptFactory('question', {
+        const password = await PromptFactory('secret', {
             name:'password',
             message:'Enter your password:'
         });
@@ -119,14 +37,17 @@ figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
         auth.email = email;
         auth.password = password;
 
-        await authenticate(auth);
+        isAuthenticated = await authenticate(auth);
 
-        if (isAuthenticated) console.log("Authentication successful!");
-        else console.log("Invalid email or password, try again.");
+        if (isAuthenticated === null) break;
+
+        // if (isAuthenticated) console.log("Authentication successful!");
+        // else console.log("Invalid email or password, try again.");
 
     } while(!isAuthenticated)
 
 
+    if (!isAuthenticated) return;
     
     const menu = {
         name:'menu',
@@ -149,8 +70,9 @@ figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
 
 
 // Listen to process errors
-// process.addListener("uncaughtException", ()=>PromptFactory('choice'))
-// process.addListener("unhandledRejection", ()=>PromptFactory('choice'));
+if (!env.isDevelopment) process.addListener("uncaughtException", ()=> process.exit());
+
+if (!env.isDevelopment) process.addListener("unhandledRejection", ()=>PromptFactory('choice'));
 
 
 
