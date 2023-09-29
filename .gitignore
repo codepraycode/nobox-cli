@@ -10,3 +10,6 @@ package-lock.json
 
 # Error logs
 yarn-error.log
+
+# Test coverage
+coverage
