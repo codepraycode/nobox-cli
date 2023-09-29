@@ -60,11 +60,25 @@ When opening an Issue, you may want to check the following:
 -[ ] Add a labels to your issue e.g *bug*, *documentation*, *enhancement*, *question*, etc. You can also create yours.
 -[ ] If there is a pull request that relates to an issue, do well to update the issue and reference the pull request.
 
-### Solve
+### Solution
 
 When you scan through the existing issues, and find one that interests you (by narrowing down your search by labels as filters), you're welcome to open a pull request to address it.
 
-It's advisable to make your contribution cover at most two areas at a time per pull request. Of course, it's not bad to cover multiple areas at once.
+It's advisable to make your contribution cover just an area at a time per pull request. Of course.
+
+### Test
+
+It's always advisable to test whatever you've done. This project uses [`jest`](https://jestjs.io/docs/). To run test, run `test` prefix with your package manager
+
+```bash
+npm test
+```
+
+```bash
+yarn test
+```
+
+
 
 ### Commit
 
