@@ -78,8 +78,6 @@ npm test
 yarn test
 ```
 
-
-
 ### Commit
 
 Make sure your commit messages/notes indicate what you did, this will help when checking your contribution and help in approving your work on time. Examples of commit messages 👇🏾
