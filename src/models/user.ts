@@ -122,7 +122,9 @@ class User implements Omit<IUser, "password"> {
         try {
 
             return records.map((record)=> new User(record));
-        } catch(err){}
+        } catch(err){
+            // Handle error
+        }
 
     }
 }
