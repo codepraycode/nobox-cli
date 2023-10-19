@@ -9,6 +9,7 @@ import PromptFactory from './helpers/prompt';
 import figlet from 'figlet';
 import { login } from './commands/login';
 import { ListProjects } from './commands/projects';
+import { logout } from './commands/logout';
 
 const header = figlet.textSync("NOBOX CONSOLE", { width:80 });
 
@@ -33,11 +34,16 @@ program
     })
 
 program
+    .command("logout")
+    .description("Remove Nobox account from this device")
+    .action(async ()=>{
+        await logout();
+    })
+
+program
     .command("projects")
     .description("List your projects in nobox")
     .action(async ()=>{
-        // console.log("str", str);
-        // console.log("options", options)
         ListProjects()
     })
 
