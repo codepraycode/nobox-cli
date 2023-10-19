@@ -45,11 +45,9 @@ figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
         auth.password = password;
 
         isAuthenticated = await authenticate(auth);
+        // isAuthenticated = await authenticate();
 
         if (isAuthenticated === null) break;
-
-        // if (isAuthenticated) console.log("Authentication successful!");
-        // else console.log("Invalid email or password, try again.");
 
     } while(!isAuthenticated)
 

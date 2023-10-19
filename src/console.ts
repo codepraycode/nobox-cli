@@ -1,5 +1,5 @@
 import { createInterface } from "readline";
-import User, { IUserRecord } from "./models/user";
+import User from "./models/user";
 
 interface IDocs {
     [key: string]: string | number
@@ -145,7 +145,7 @@ class Console {
         // console.log(params);
         params["age"] = Number(params["age"]);
 
-        await User.create(params as any);
+        await User.create(params as never);
         
         return;
     }
@@ -163,7 +163,7 @@ class Console {
             if (field === "id" || fields.includes(field)) params[field] = val.replace(/"/g, '').replace(/'/g, '');
         });
 
-        let {id, ...rest} = params;
+        const {id, ...rest} = params;
 
         if (!id) {
             console.log("'id' is required!");
@@ -216,13 +216,13 @@ class Console {
         let running = true;
 
         do {
-            let input = await Console.readInput();
+            const input = await Console.readInput();
 
             // Parse the command
-            let [command, ...args] = input.trim().split(" ")
+            const [commandd, ...args] = input.trim().split(" ")
             // console.log(command, args);
 
-            command = command.toLowerCase();
+            const command = commandd.toLowerCase();
 
             if (!command) {
                 continue
