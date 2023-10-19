@@ -2,7 +2,7 @@
 
 import Preloader from "../helpers/preloader";
 import PromptFactory from "../helpers/prompt";
-import { signals } from "../utils";
+import { Project, signals } from "../utils";
 import { get } from "../utils/request";
 
 
@@ -11,7 +11,7 @@ const loadProjects = async () => {
     const res = await get("/gateway/*/projects");
 
     
-    const projects = res.map((item: { name: string; slug: string; id: string; })=>(
+    const projects = res.map((item: Project)=>(
         {
             name: item.name,
             slug: item.slug,

@@ -63,6 +63,24 @@ export interface Loading {
 		frame(): string;
 }
 
+export interface Project {
+    id: string;
+    name: string;
+    slug: string;
+}
+
+export interface RecordSpace extends Project {
+    description: string,
+}
+
+
+export interface Record {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+
+	[field:string]: string
+}
 
 export type Signal = "projects" | 'quit' | 'main'
 

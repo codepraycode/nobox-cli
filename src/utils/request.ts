@@ -31,6 +31,7 @@ axiosApi.interceptors.request.use(async (req) => {
     if(token){
         req.headers.Authorization = `Bearer ${token}`,
         req.headers["Content-Type"] = 'application/json'
+        req.headers["use-pre-stored-structure"] = 'true'
     }
   return req;
 });

@@ -10,6 +10,7 @@ import figlet from 'figlet';
 import { login } from './commands/login';
 import { ListProjects } from './commands/projects';
 import { logout } from './commands/logout';
+import { ListRecordSpaces, ListRecords } from './commands/record';
 
 const header = figlet.textSync("NOBOX CONSOLE", { width:80 });
 
@@ -45,6 +46,18 @@ program
     .description("List your projects in nobox")
     .action(async ()=>{
         ListProjects()
+    })
+
+program
+    .command("records")
+    .description("Interact with records and record spaces in a project on Nobox cloud")
+    .requiredOption("-p --project <string>", "Project slug")
+    .option("-s --space <string>", "Record space")
+    .action(async (str)=>{
+        // console.log(str);
+        if (str.space) return await ListRecords(str.project, str.space);
+        
+        await ListRecordSpaces(str.project);
     })
 
 program.parse()
