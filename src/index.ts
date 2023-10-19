@@ -8,6 +8,8 @@ import figlet from 'figlet';
 import PromptFactory from './helpers/prompt';
 import {isDevelopment} from './config';
 import verifyAuthentication from './helpers/authentication';
+import { MainMenu, ProjectsMenu } from './helpers/Menu';
+import { Signal } from './utils';
 
 
 
@@ -21,22 +23,15 @@ figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
     // Terminate if not authenticated.
     if (!isAuthenticated) return;
     
-    const menu = {
-        name:'menu',
-        message: "Pick an option",
-        choices: [
-            // { message: "Login to account", name: 'login'},
-            { message: "View projects", name: 'projects'},
-            { message: "Quit", name: 'quit'}
-        ]
-    }
+    let runningSignal: Signal = 'main';
+
+    do {
+        
+        if (runningSignal === 'projects') runningSignal = await ProjectsMenu();
+        else runningSignal = await MainMenu();
+    } while(runningSignal !== 'quit');
     
-    PromptFactory('option', menu)
-    .then(async (res:string)=>{
-        if (res === 'quit') {
-            return await PromptFactory('choice');
-        }
-    });
+    console.log(runningSignal);
 });
 
 

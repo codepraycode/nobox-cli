@@ -2,7 +2,7 @@
 
 import loading from 'loading-cli';
 import printOut from '../utils/print';
-import { Loading } from '../utils/static';
+import { Loading } from '../utils';
 
 
 let loader: Loading | null;
