@@ -62,3 +62,18 @@ export const ProjectsMenu = async () => {
 
     return res;
 }
+
+
+export const ListProjects = async () => {
+
+    Preloader.start("Loading Projects...")
+
+
+    const projects = await loadProjects();
+
+    Preloader.stop();
+
+    projects.forEach((element: { name: string; }) => {
+        console.log(`- ${element.name}`)
+    });
+}

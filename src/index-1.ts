@@ -2,45 +2,37 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-import { program } from 'commander';
 
 import {isDevelopment} from './config';
-import PromptFactory from './helpers/prompt';
 import figlet from 'figlet';
-import { ListProjects } from './helpers/Menu';
 
-const header = figlet.textSync("NOBOX CONSOLE", { width:80 });
-
-
-
-
-program
-    .name("nobox")
-    .description("CLI to Nobox cloud service, visit https://nobox.cloud for more details")
-    .version("0.1.0")
-    .addHelpText('before', header)
-
-
-program
-    .command("projects")
-    .description("List your projects in nobox")
-    .action(async ()=>{
-        // console.log("str", str);
-        // console.log("options", options)
-        ListProjects()
-    })
-
-program.parse()
+import PromptFactory from './helpers/prompt';
+import verifyAuthentication from './helpers/authentication';
+import { MainMenu, ProjectsMenu } from './helpers/Menu';
+import { Signal } from './utils';
 
 
 
+figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
+
+    console.log(data);
 
 
+    const isAuthenticated = await verifyAuthentication();
 
+    // Terminate if not authenticated.
+    if (!isAuthenticated) return;
+    
+    let runningSignal: Signal = 'main';
 
-
-
-
+    do {
+        
+        if (runningSignal === 'projects') runningSignal = await ProjectsMenu();
+        else runningSignal = await MainMenu();
+    } while(runningSignal !== 'quit');
+    
+    console.log(runningSignal);
+});
 
 
 
