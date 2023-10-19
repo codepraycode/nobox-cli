@@ -5,10 +5,9 @@ dotenv.config();
 
 import figlet from 'figlet';
 
-import PromptFactory from './utils/prompt';
-import env from './utils/env';
-import { authenticate } from './helpers/authentication';
-import printOut from './utils/print';
+import PromptFactory from './helpers/prompt';
+import {isDevelopment} from './config';
+import verifyAuthentication from './helpers/authentication';
 
 
 
@@ -16,41 +15,8 @@ figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
 
     console.log(data);
 
-    let isAuthenticated: boolean | null;
 
-    // Continue to attempt authentication
-    // is isAuthenticated is null, there was an error with nobox service
-
-    printOut("Authentication is required!", 'blue')
-
-    do {
-        const auth:{email:string, password:string} = {
-            email:'',
-            password:''
-        };
-
-
-        const email = await PromptFactory('question', {
-            name:'email',
-            message:"Enter email address:"
-        });
-
-        const password = await PromptFactory('secret', {
-            name:'password',
-            message:'Enter your password:'
-        });
-
-
-        auth.email = email;
-        auth.password = password;
-
-        isAuthenticated = await authenticate(auth);
-        // isAuthenticated = await authenticate();
-
-        if (isAuthenticated === null) break;
-
-    } while(!isAuthenticated)
-
+    const isAuthenticated = await verifyAuthentication();
 
     // Terminate if not authenticated.
     if (!isAuthenticated) return;
@@ -76,9 +42,9 @@ figlet("NOBOX CONSOLE", {width:80}, async (_, data)=>{
 
 
 // Listen to process errors
-if (!env.isDevelopment) process.addListener("uncaughtException", ()=> process.exit());
+if (!isDevelopment) process.addListener("uncaughtException", ()=> process.exit());
 
-if (!env.isDevelopment) process.addListener("unhandledRejection", ()=>PromptFactory('choice'));
+if (!isDevelopment) process.addListener("unhandledRejection", ()=>PromptFactory('choice'));
 
 
 
