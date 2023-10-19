@@ -8,8 +8,9 @@ import figlet from 'figlet';
 
 import PromptFactory from './helpers/prompt';
 import verifyAuthentication from './helpers/authentication';
-import { MainMenu, ProjectsMenu } from './helpers/Menu';
+import { MainMenu } from './helpers/Menu';
 import { Signal } from './utils';
+import { ProjectsMenu } from './commands/projects';
 
 
 

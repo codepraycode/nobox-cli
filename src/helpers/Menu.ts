@@ -1,6 +1,4 @@
-import { loadProjects } from "../api/projects";
 import { signals } from "../utils";
-import Preloader from "./preloader";
 import PromptFactory from "./prompt";
 
 
@@ -36,44 +34,5 @@ export const MainMenu = async () => {
 
 
 
-export const ProjectsMenu = async () => {
-
-    Preloader.start("Loading Projects...")
 
 
-    const projects = await loadProjects();
-
-    Preloader.stop();
-
-    const projectMenu = { 
-        name:'project-menu',
-        message: "Select a project",
-        choices: [
-            ...projects.map((item: { name: string; })=>({message: item.name, name: signals.listProjects})),
-            { message: "Go back", name: signals.main },
-        ]
-        // choices: [
-        //     { message: "Project 3", name: signals.listProjects },
-        //     { message: "Go back", name: signals.main },
-        // ]
-    }
-
-    const res = await PromptFactory('option', projectMenu);
-
-    return res;
-}
-
-
-export const ListProjects = async () => {
-
-    Preloader.start("Loading Projects...")
-
-
-    const projects = await loadProjects();
-
-    Preloader.stop();
-
-    projects.forEach((element: { name: string; }) => {
-        console.log(`- ${element.name}`)
-    });
-}

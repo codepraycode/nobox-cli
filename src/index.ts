@@ -7,7 +7,8 @@ import { program } from 'commander';
 import {isDevelopment} from './config';
 import PromptFactory from './helpers/prompt';
 import figlet from 'figlet';
-import { ListProjects } from './helpers/Menu';
+import { login } from './commands/login';
+import { ListProjects } from './commands/projects';
 
 const header = figlet.textSync("NOBOX CONSOLE", { width:80 });
 
@@ -20,6 +21,16 @@ program
     .version("0.1.0")
     .addHelpText('before', header)
 
+
+program
+    .command("login")
+    .description("Login to Nobox account")
+    .action(async ()=>{
+        // console.log("str", str);
+        // console.log("options", options)
+        
+        await login();
+    })
 
 program
     .command("projects")
