@@ -13,3 +13,10 @@ yarn-error.log
 
 # Test coverage
 coverage
+
+# Builds
+dist
+bin
+
+# Production based files
+config.json

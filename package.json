@@ -1,17 +1,29 @@
 {
-  "name": "nobox-console",
+  "name": "@codepraycode/nobox-console",
   "version": "1.0.0",
-  "description": "A project to try out all of nobox's capabilities",
-  "main": "index.ts",
+  "description": "CLI to Nobox cloud service, visit https://nobox.cloud for more details",
+  "main": "src/index.ts",
+  "bin": "./dist",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "jest",
     "dev": "npx nodemon",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "build": "tsc",
+    "package:win": "pkg . --out-path bin -b --targets node16-win-x64"
   },
   "author": "codepraycode",
   "repository": {
     "url": "https://github.com/codepraycode/nobox-console"
   },
+  "keywords": [
+    "cli",
+    "nobox",
+    "cloud",
+    "nobox-console"
+  ],
   "license": "GPL-3.0",
   "dependencies": {
     "@types/cli-table": "^0.3.3",
@@ -23,8 +35,7 @@
     "figlet": "^1.6.0",
     "jest": "^29.7.0",
     "kleur": "^4.1.5",
-    "loading-cli": "^1.1.1",
-    "nobox-client": "^1.1.11"
+    "loading-cli": "^1.1.1"
   },
   "devDependencies": {
     "@types/color-support": "^1.1.2",
@@ -36,6 +47,7 @@
     "dotenv": "^16.3.1",
     "eslint": "^8.50.0",
     "nodemon": "^3.0.1",
+    "pkg": "^5.8.1",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"

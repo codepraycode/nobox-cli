@@ -1,11 +1,16 @@
 import axios from "axios";
-import {api_url} from "../config";
+import {api_url, env_token, isDevelopment} from "../config";
 import { readFile } from "fs/promises";
 
 
 // Load Token
 const loadToken = async() =>{
 
+    if (isDevelopment) {
+        return env_token
+    }
+
+    
     const filePath = './config.json';
     const content = await readFile(filePath, { encoding: 'utf8' });
 
