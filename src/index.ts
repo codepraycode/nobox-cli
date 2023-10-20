@@ -52,7 +52,7 @@ program
     .command("records")
     .description("Interact with records and record spaces in a project on Nobox cloud")
     .requiredOption("-p --project <string>", "Project slug")
-    .option("-s --space <string>", "Record space")
+    .option("-s --space <string>", "Record space slug")
     .action(async (str)=>{
         // console.log(str);
         if (str.space) return await ListRecords(str.project, str.space);

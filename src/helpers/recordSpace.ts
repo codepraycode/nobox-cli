@@ -1,5 +1,39 @@
-import { Project, RecordSpace } from "../utils";
+import { Project, Record, RecordKey, RecordSpace, RecordValue, RowItem } from "../utils";
 import { get } from "../utils/request";
+
+
+const addToRow = (row:string[], value:string, skip:number = 2) => {    
+    const skip_columns = row.length - skip;
+
+    if (skip_columns < 1) return [...row, value];
+
+    return [...row.slice(0, skip_columns), value, ...row.slice(skip_columns,)]
+}
+
+export const parseRecords = (records:Record[]) => {
+    let headers: string[] = ['', 'id', 'updatedAt', 'createdAt'];
+    
+    
+    const rows:RowItem[] = records.map((record, index)=>{
+        const rowItem:RowItem = { [index]: [] };
+
+        Object.entries(record).forEach((item:[RecordKey, RecordValue])=> {
+
+            const [field, value] = item;
+
+            if (!headers.includes(field)) headers = addToRow(headers, field);
+
+            rowItem[index] = addToRow(rowItem[index], String(value));
+        })
+
+        return rowItem;
+    });
+
+
+    return {headers, rows}
+
+}
+
 
 export const loadRecordSpace = async (projectSlug: string) => {
     const res = await get("/gateway/*/projects");

@@ -2,8 +2,9 @@
 
 import Preloader from "../utils/preloader";
 import printOut from "../utils/print";
-import { loadRecordSpace, loadRecords } from "../helpers/recordSpace";
+import { loadRecordSpace, loadRecords, parseRecords } from "../helpers/recordSpace";
 import { handleRequestError } from "../utils/request";
+import { TableDisplay } from "../utils/table";
 
 
 export const ListRecordSpaces = async (projectSlug: string) => {
@@ -50,7 +51,9 @@ export const ListRecords = async (projectSlug: string, recordSpaceSlug: string)=
 
         const records = await loadRecords(projectSlug, recordSpaceSlug);
 
-        console.log(records);
+        const {headers, rows} = parseRecords(records);
+
+        return TableDisplay(headers, rows);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch(err:any) {

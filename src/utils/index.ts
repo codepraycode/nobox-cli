@@ -73,14 +73,18 @@ export interface RecordSpace extends Project {
     description: string,
 }
 
+export type RecordValue = string | number;
+export type RecordKey = string;
+export type RowItem = { [ index:string ]: string[] }
+
 
 export interface Record {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-
-	[field:string]: string
+	id: RecordKey;
+    createdAt: RecordKey;
+    updatedAt: RecordKey;
+	[field:RecordKey]: RecordValue;
 }
+
 
 export type Signal = "projects" | 'quit' | 'main'
 
