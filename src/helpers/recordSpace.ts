@@ -14,7 +14,8 @@ export const parseRecords = (records:Record[]) => {
     let headers: string[] = ['', 'id', 'updatedAt', 'createdAt'];
     
     
-    const rows:RowItem[] = records.map((record, index)=>{
+    const rows:RowItem[] = records.map((record, record_index)=>{
+        const index = record_index + 1;
         const rowItem:RowItem = { [index]: [] };
 
         Object.entries(record).forEach((item:[RecordKey, RecordValue])=> {
