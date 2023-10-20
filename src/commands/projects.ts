@@ -1,27 +1,11 @@
 // Load Projects
 
-import Preloader from "../helpers/preloader";
-import PromptFactory from "../helpers/prompt";
-import { Project, signals } from "../utils";
-import { get } from "../utils/request";
-
-
-
-const loadProjects = async () => {
-    const res = await get("/gateway/*/projects");
-
-    
-    const projects = res.map((item: Project)=>(
-        {
-            name: item.name,
-            slug: item.slug,
-            id: item.id
-        }
-    ))
-
-
-    return projects;
-}
+import Preloader from "../utils/preloader";
+import { signals } from "../utils";
+import Prompt from "../utils/prompt";
+import { loadProjects } from "../helpers/projects";
+import printOut from "../utils/print";
+import { handleRequestError } from "../utils/request";
 
 
 
@@ -29,14 +13,24 @@ export const ListProjects = async () => {
 
     Preloader.start("Loading Projects...")
 
+    let error_message = "Could not load projects";
 
-    const projects = await loadProjects();
 
-    Preloader.stop();
+    try{
 
-    projects.forEach((element: { name: string; }) => {
-        console.log(`- ${element.name}`)
-    });
+        const projects = await loadProjects();
+        projects.forEach((element: { name: string; }) => {
+            console.log(`- ${element.name}`)
+        });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch(err:any) {
+        error_message = handleRequestError(err, error_message)
+    } finally {
+
+        Preloader.stop();
+        if(error_message) printOut(error_message, 'red');
+    }
 }
 
 export const ProjectsMenu = async () => {
@@ -55,13 +49,9 @@ export const ProjectsMenu = async () => {
             ...projects.map((item: { name: string; })=>({message: item.name, name: signals.listProjects})),
             { message: "Go back", name: signals.main },
         ]
-        // choices: [
-        //     { message: "Project 3", name: signals.listProjects },
-        //     { message: "Go back", name: signals.main },
-        // ]
     }
 
-    const res = await PromptFactory('option', projectMenu);
+    const res = await Prompt.selection(projectMenu);
 
     return res;
 }

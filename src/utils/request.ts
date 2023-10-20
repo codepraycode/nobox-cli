@@ -41,6 +41,17 @@ export async function get(url:string) {
   return await axiosApi.get(url).then(response => response.data);
 }
 
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const handleRequestError = (error:any, default_message:string):string => {
+    
+    if (error.cause?.code === 'ENOTFOUND') {
+        return "Could not connect to nobox cloud service"
+    }
+
+    return default_message
+}
+
 // export async function post(url:string, data:unknown) {
 //   return axiosApi
 //     .post(url, { ...data })

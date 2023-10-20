@@ -1,113 +1,52 @@
-import { isDevelopment } from '../config';
-import printOut from '../utils/print';
-import Preloader from './preloader';
-import PromptFactory from './prompt';
+import Preloader from "../utils/preloader";
+import printOut from "../utils/print";
+import Prompt from "../utils/prompt";
 
-
-type authData = {
+export type AuthData = {
     email: string,
     password: string
 }
 
-
-
-
-const verifyAuthentication = async () => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const authenticate = async (data:AuthData) => {
     
-    if (isDevelopment) return true;
-
-    let isAuthenticated: boolean | null;
-
-    // Continue to attempt authentication
-    // is isAuthenticated is null, there was an error with nobox service
-
-    printOut("Authentication is required!", 'blue')
-
-    do {
-        const auth:{email:string, password:string} = {
-            email:'',
-            password:''
-        };
-
-
-        const email = await PromptFactory('question', {
-            name:'email',
-            message:"Enter email address:"
-        });
-
-        const password = await PromptFactory('secret', {
-            name:'password',
-            message:'Enter your password:'
-        });
-
-
-        auth.email = email;
-        auth.password = password;
-
-        isAuthenticated = await authenticate(auth);
-        // isAuthenticated = await authenticate();
-
-        if (isAuthenticated === null) break;
-
-    } while(!isAuthenticated)
-
-
-}
-
-export default verifyAuthentication;
-
-
-
-
-export const authenticate = async (data:authData): Promise<boolean | null> => {
-    
-    let isAuthenticated = false
-    // printOut("Authenticating...", 'grey');
     Preloader.start("Authenticating...");
 
-    const {email, password} = data;
+    setTimeout(()=>{
 
+        Preloader.success("Authenticated!");
+
+        printOut("However, authentication is not implemented yet", 'grey')
+    }, 5000)
+}
+
+
+
+export const receiveAuthInput = async (): Promise<AuthData> => {
+    const email = await Prompt.question({
+        name:'email',
+        message:"Enter email address:"
+    });
+
+    const password = await Prompt.secret({
+        name:'password',
+        message:'Enter your password:'
+    });
+
+
+    return {
+        email, password
+    }
+}
+
+
+export const removeUser = async () => {
+    
+    Preloader.start("working on that...");
 
     setTimeout(()=>{
-        // console.log(data);
-        Preloader.success("Authenticated!");
-    }, 5000)
-
-
-    try {
-
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const response = await Nobox.login({ email, password });
-    
-        if (response){
-
-            const {token, user} = response;
-        
-            console.log(token, user);
-            isAuthenticated = true;
-
-            Preloader.success("Authenticated!");
-        }
-    
-    } catch (err) {
-        // console.log("Error while authenticating");
-        Preloader.danger("Authentication failed!")
-        if(isDevelopment) console.error(err)
-        return null;
-    }
-
-    return isAuthenticated;
+        Preloader.stop();
+        printOut("You're logged out", 'grey')
+    }, 2000)
 }
 
-
-export const projects = async () => {
-    const url = 'https://api.nobox.cloud/';
-
-    fetch(url, {
-        method: "GET",
-        headers: {
-            
-        }
-    })
-}

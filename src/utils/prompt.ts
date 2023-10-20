@@ -17,7 +17,34 @@ type PromptParams = {
 };
 
 
-const PromptFactory = (promptType:PromptType, params?: PromptParams) => {
+class Prompt {
+
+
+    static question(params:PromptParams) {
+        const prompt = new Input(params);
+
+        return prompt.run();
+    }
+
+    static selection(params:PromptParams) {
+        const prompt = new Select(params);
+
+        return prompt.run();
+    }
+
+    static secret(params:PromptParams) {
+        const prompt = new Password(params);
+
+        return prompt.run();
+    }
+
+    static choice(params:PromptParams) {
+        const prompt = new Toggle(params);
+        return prompt.run();
+    }
+}
+
+export const PromptFactory = (promptType:PromptType, params?: PromptParams) => {
 
     let prompt = new Input({
         name:'prompt',
@@ -55,4 +82,4 @@ const PromptFactory = (promptType:PromptType, params?: PromptParams) => {
 
 
 
-export default PromptFactory;
+export default Prompt;

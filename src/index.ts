@@ -5,12 +5,12 @@ dotenv.config();
 import { program } from 'commander';
 
 import {isDevelopment} from './config';
-import PromptFactory from './helpers/prompt';
 import figlet from 'figlet';
-import { login } from './commands/login';
+import { Login } from './commands/login';
 import { ListProjects } from './commands/projects';
-import { logout } from './commands/logout';
+import { Logout } from './commands/logout';
 import { ListRecordSpaces, ListRecords } from './commands/record';
+import Prompt from './utils/prompt';
 
 const header = figlet.textSync("NOBOX CONSOLE", { width:80 });
 
@@ -31,14 +31,14 @@ program
         // console.log("str", str);
         // console.log("options", options)
         
-        await login();
+        await Login();
     })
 
 program
     .command("logout")
     .description("Remove Nobox account from this device")
     .action(async ()=>{
-        await logout();
+        await Logout();
     })
 
 program
@@ -73,11 +73,16 @@ program.parse()
 
 
 
+const quitParams = {
+    name:'quit',
+    message:"Are you sure you want to quit?"
+}
+
 
 // Listen to process errors
 if (!isDevelopment) process.addListener("uncaughtException", ()=> process.exit());
 
-if (!isDevelopment) process.addListener("unhandledRejection", ()=>PromptFactory('choice'));
+if (!isDevelopment) process.addListener("unhandledRejection", ()=>Prompt.choice(quitParams));
 
 
 

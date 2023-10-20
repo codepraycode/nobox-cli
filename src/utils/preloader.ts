@@ -1,8 +1,8 @@
 
 
 import loading from 'loading-cli';
-import printOut from '../utils/print';
-import { Loading } from '../utils';
+import printOut from './print';
+import { Loading } from '.';
 
 
 let loader: Loading | null;

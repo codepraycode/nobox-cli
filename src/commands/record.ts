@@ -1,86 +1,65 @@
 // Load Projects
 
-import Preloader from "../helpers/preloader";
-import { Project, RecordSpace,Record } from "../utils";
+import Preloader from "../utils/preloader";
 import printOut from "../utils/print";
-import { get } from "../utils/request";
-
-
-
-const loadRecordSpace = async (projectSlug: string) => {
-    const res = await get("/gateway/*/projects");
-
-
-    const project_item = res.filter((item:Project)=>item.slug === projectSlug);
-
-    if (project_item.length < 1) return null;
-
-    const project = project_item[0];
-    
-    return project.recordSpaces.map((item:RecordSpace )=>(
-        {
-            name: item.name,
-            slug: item.slug,
-            id: item.id,
-            description: item.description
-        }
-    ))
-
-
-    
-}
-
-const loadRecords = async (projectSlug: string, recordSpaceSlug: string) => {
-    
-    const res = await get(`/${projectSlug}/${recordSpaceSlug}/`);
-
-
-    return res;
-}
-
+import { loadRecordSpace, loadRecords } from "../helpers/recordSpace";
+import { handleRequestError } from "../utils/request";
 
 
 export const ListRecordSpaces = async (projectSlug: string) => {
-
+    // Pre-condition
     if (!projectSlug) return printOut("Project slug is required", 'red');
 
     Preloader.start(`Loading record spaces for "${projectSlug}"...`)
 
 
-    const spaces = await loadRecordSpace(projectSlug);
+    let error_message = `Could not resolve record spaces for ${projectSlug}`;
 
-    Preloader.stop();
+    try{
 
-    if (spaces === null) return printOut(`Could not resolve record spaces for ${projectSlug}`);
+        const spaces = await loadRecordSpace(projectSlug);
 
-    spaces.forEach((element: { name: string; }) => {
-        console.log(`- ${element.name}`)
-    });
+        if (spaces === null) return printOut("No records in record space", 'grey');
+
+        spaces.forEach((element: { name: string; }) => {
+            console.log(`- ${element.name}`)
+        });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch(err:any) {
+        error_message = handleRequestError(err, error_message)
+    } finally {
+
+        Preloader.stop();
+        if(error_message) printOut(error_message, 'red');
+    }
 }
 
 
 export const ListRecords = async (projectSlug: string, recordSpaceSlug: string)=>{
+    // Pre-conditions
     if (!projectSlug) return printOut("Project slug is required", 'red');
     if (!recordSpaceSlug) return printOut("Record space slug is required", 'red');
 
     Preloader.start(`Loading records from ${recordSpaceSlug} record space in "${projectSlug}"...`)
 
-    let records:Record;
+
+    let error_message = `Could not load records from ${recordSpaceSlug} record space in "${projectSlug}"`;
+
     try{
 
-        records = await loadRecords(projectSlug, recordSpaceSlug);
-    } catch(err){
-        Preloader.stop()
-        printOut(`Could not load records from ${recordSpaceSlug} record space in "${projectSlug}"`, 'red');
-        
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        console.log((err as any).response?.data);
+        const records = await loadRecords(projectSlug, recordSpaceSlug);
 
-        return;
-    }finally {
-        Preloader.stop()
+        console.log(records);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch(err:any) {
+        error_message = handleRequestError(err, error_message)
+    } finally {
+
+        Preloader.stop();
+        if(error_message) printOut(error_message, 'red');
     }
 
-
-    console.log(records);
+    
 }
