@@ -13,24 +13,28 @@ export const ListProjects = async () => {
 
     Preloader.start("Loading Projects...")
 
-    let error_message = "Could not load projects";
-
+    let error_message = null ;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let projects;
 
     try{
-
-        const projects = await loadProjects();
-        projects.forEach((element: { name: string; }) => {
-            console.log(`- ${element.name}`)
-        });
-
+        projects = await loadProjects();
+        
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch(err:any) {
-        error_message = handleRequestError(err, error_message)
+        error_message = handleRequestError(err, "Could not load projects")
     } finally {
-
         Preloader.stop();
-        if(error_message) printOut(error_message, 'red');
     }
+
+
+    if(error_message) return printOut(error_message, 'red');
+    if(!projects) return printOut("No projects", 'grey');
+
+    projects.forEach((element: { name: string; }) => {
+        console.log(`- ${element.name}`)
+    });
+
 }
 
 export const ProjectsMenu = async () => {
