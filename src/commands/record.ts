@@ -17,6 +17,7 @@ export const ListRecordSpaces = async (projectSlug: string) => {
     const default_error_message = `Could not resolve record spaces for ${projectSlug}`;
     let error_message = null;
     let spaces;
+    let errorObj = null;
 
 
     try{
@@ -25,12 +26,13 @@ export const ListRecordSpaces = async (projectSlug: string) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch(err:any) {
+        errorObj = err.response?.data ? err.response.data : err;
         error_message = handleRequestError(err, default_error_message)
     } finally {
         Preloader.stop();
     }
     
-    
+    if(errorObj) console.error(errorObj)
     if(error_message) return printOut(error_message, 'red');
     
     if (spaces === null) return printOut("No records in record space", 'grey');
@@ -54,6 +56,7 @@ export const ListRecords = async (projectSlug: string, recordSpaceSlug: string)=
 
     let error_message = null;
     let records;
+    let errorObj = null;
 
     try{
 
@@ -61,12 +64,14 @@ export const ListRecords = async (projectSlug: string, recordSpaceSlug: string)=
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch(err:any) {
+        errorObj = err.response?.data ? err.response.data : err;
         error_message = handleRequestError(err, default_error_message)
     } finally {
 
         Preloader.stop();
     }
     
+    if(errorObj) console.error(errorObj)
     if(error_message) printOut(error_message, 'red');
 
     const {headers, rows} = parseRecords(records);

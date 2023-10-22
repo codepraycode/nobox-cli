@@ -14,6 +14,7 @@ export const ListProjects = async () => {
     Preloader.start("Loading Projects...")
 
     let error_message = null ;
+    let errorObj = null;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let projects;
 
@@ -22,12 +23,13 @@ export const ListProjects = async () => {
         
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch(err:any) {
+        errorObj = err.response?.data ? err.response.data : err;
         error_message = handleRequestError(err, "Could not load projects")
     } finally {
         Preloader.stop();
     }
 
-
+    if(errorObj) console.error(errorObj)
     if(error_message) return printOut(error_message, 'red');
     if(!projects) return printOut("No projects", 'grey');
 
