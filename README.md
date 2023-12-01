@@ -14,21 +14,7 @@ You'll need to have [the latest LTS version of NodeJs](https://nodejs.org/downlo
 
 You'll also need a package manager, either `npm` or `yarn`
 
-Once that's ready, run the following in your terminal
-
-```bash
-git clone git@github.com:codepraycode/nobox-console.git
-
-# After cloning is complete
-cd nobox-console
-
-npm install
-
-# Run console
-npx ts-node ./src/index.ts
-
-# According to your package manager.
-```
+Once that's ready, clone this project.
 
 > After cloning the repo, create a `.env` file, and add some environment variables. The format is present in the `.env.example` file in the root directory of the project.
 
